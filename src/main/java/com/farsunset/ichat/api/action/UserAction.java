@@ -27,7 +27,7 @@ public class UserAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
+
 		UserDao userDao = new UserDaoImpl();
 		List<User> users = userDao.getAllUser();
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -49,7 +49,7 @@ public class UserAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
+
 		String id = (String) request.getParameter("id");
 
 		UserDao userDao = new UserDaoImpl();
@@ -74,7 +74,7 @@ public class UserAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
+
 		String account = (String) request.getParameter("account");
 		String password = (String) request.getParameter("password");
 
@@ -100,7 +100,7 @@ public class UserAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
+
 		String userName = (String) request.getParameter("username");
 		String password = (String) request.getParameter("password");
 
@@ -115,6 +115,31 @@ public class UserAction extends ActionSupport {
 			map.put("status", "success");
 			map.put("message", "注册成功");
 			map.put("data", user);
+		}
+		response.getWriter().print(new Gson().toJson(map));
+		return null;
+	}
+
+	public String addFriend() throws Exception {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpServletResponse response = ServletActionContext.getResponse();
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+
+		String userId = (String) request.getParameter("user_id");
+		String friendId = request.getParameter("friend_id");
+		UserDao userDao = new UserDaoImpl();
+		boolean result = userDao.addFriend(Integer.valueOf(userId),
+				Integer.valueOf(friendId));
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (result) {
+			map.put("status", "success");
+			map.put("message", "添加好友成功");
+			map.put("data", "");
+		} else {
+			map.put("status", "error");
+			map.put("message", "添加好友失败");
+			map.put("data", "");
 		}
 		response.getWriter().print(new Gson().toJson(map));
 		return null;

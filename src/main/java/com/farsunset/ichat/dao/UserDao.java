@@ -20,4 +20,6 @@ public interface UserDao {
 
 	// 注册
 	public User register(String userName, String password);
+
+	public boolean addFriend(int userId, int friendId);
 }

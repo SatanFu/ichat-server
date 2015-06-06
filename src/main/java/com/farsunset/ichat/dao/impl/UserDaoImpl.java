@@ -151,4 +151,48 @@ public class UserDaoImpl implements UserDao {
 		return user;
 	}
 
+	@Override
+	public boolean addFriend(int userId, int friendId) {
+		// TODO Auto-generated method stub
+		conn = BaseDao.getConnection();
+		String sql = "insert into friend_map (user_id,friend_id) values (?,?)";
+		int result1;
+		int result2;
+		boolean falg = false;
+		try {
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, userId);
+			ps.setInt(2, friendId);
+			result1 = ps.executeUpdate();
+
+			ps.setInt(1, friendId);
+			ps.setInt(2, userId);
+			result2 = ps.executeUpdate();
+
+			if (result1 > 0 && result2 > 0) {
+				falg = true;
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			BaseDao.closeAll(conn, ps, rs);
+		}
+		return falg;
+
+	}
+
 }
